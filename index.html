@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GestureCanvas</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+
+  <link rel="stylesheet" href="src/style.css" />
+</head>
+<body>
+
+  <main id="app">
+    <!-- Full-screen camera + canvas -->
+    <section id="canvas-area">
+      <div id="camera-mirror" class="active" aria-hidden="true">
+        <video id="webcam" autoplay playsinline muted></video>
+      </div>
+      <canvas id="main-canvas" class="mirror-on"></canvas>
+
+      <div id="camera-pip">
+        <canvas id="hand-canvas"></canvas>
+        <div id="pip-label">Hand Tracking</div>
+      </div>
+
+      <div id="ocr-overlay" class="hidden">
+        <div id="ocr-box">
+          <h4>Recognized Text</h4>
+          <p id="ocr-result"></p>
+          <button id="ocr-close" class="pill-btn">Close</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Top navigation -->
+    <header id="top-nav" class="glass chrome">
+      <div class="wordmark">GESTURECANVAS</div>
+      <nav class="nav-links" aria-label="Primary">
+        <span class="nav-link active">Workspace</span>
+        <span class="nav-link">Canvas</span>
+        <span class="nav-link">Gestures</span>
+      </nav>
+      <div id="mirror-hotspot" class="hold-pill" title="Hold finger here to toggle mirror">
+        <span class="hotspot-icon">◉</span>
+        <span class="hotspot-label">Hold to Toggle</span>
+        <div id="mirror-hotspot-ring"></div>
+      </div>
+    </header>
+
+    <!-- Left glass sidebar -->
+    <aside id="creator-sidebar" class="glass chrome">
+      <button id="sidebar-toggle" class="pill-btn pill-btn--icon" type="button" aria-label="Collapse sidebar">‹</button>
+      <div id="sidebar-collapsed-label" class="sidebar-collapsed-label" aria-hidden="true">Creator</div>
+
+      <div id="sidebar-content">
+        <button type="button" class="engine-toggle open" id="engine-toggle" aria-expanded="true">
+          <span class="engine-toggle-text">
+            <span class="sidebar-title">Creator Engine</span>
+            <span class="sidebar-sub">Expert Control</span>
+          </span>
+        </button>
+
+        <div class="engine-sections" id="engine-sections">
+
+        <section class="glass-section open" id="guide-section">
+          <button type="button" class="section-toggle label-caps">Gesture Guide</button>
+          <div class="section-body" id="gesture-guide">
+            <div class="gesture-grid">
+              <div class="gesture-item"><span class="gesture-icon">☝</span><span>Draw</span></div>
+              <div class="gesture-item"><span class="gesture-icon">✌</span><span>Erase</span></div>
+              <div class="gesture-item"><span class="gesture-icon">🤏</span><span>Move</span></div>
+              <div class="gesture-item"><span class="gesture-icon">⊕</span><span>Zoom</span></div>
+            </div>
+            <ul class="gesture-notes">
+              <li>Fist → pause · finish stroke</li>
+              <li>Open palm hold 1s → reset view</li>
+              <li>Two-hand pinch → zoom &amp; rotate</li>
+              <li>Import PDF → pinch to move · draw on top</li>
+              <li>PDF fullscreen · pinch-drag scroll · two-hand zoom</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="glass-section open">
+          <button type="button" class="section-toggle label-caps">Import</button>
+          <div class="section-body mode-stack">
+            <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" class="file-input-hidden" />
+            <label for="pdf-file-input" class="pill-btn pill-btn--gold action-btn" id="btn-import-pdf">Import PDF</label>
+            <p id="pdf-import-meta" class="import-meta hidden"></p>
+            <button type="button" class="pill-btn action-btn hidden" id="btn-pdf-fullscreen">Open PDF Fullscreen</button>
+            <button type="button" class="pill-btn action-btn hidden" id="btn-pdf-exit">Exit Fullscreen</button>
+          </div>
+        </section>
+
+        <section class="glass-section open">
+          <button type="button" class="section-toggle label-caps">Drawing Modes</button>
+          <div class="section-body mode-stack">
+            <button class="pill-btn tool-btn active" data-mode="draw">Draw</button>
+            <button class="pill-btn tool-btn" data-mode="erase">Erase</button>
+            <button class="pill-btn tool-btn" data-mode="select">Select</button>
+          </div>
+        </section>
+
+        <section class="glass-section open">
+          <button type="button" class="section-toggle label-caps">Color</button>
+          <div class="section-body">
+            <div id="color-swatches">
+              <button class="swatch active" data-color="#FFD700" style="background:#FFD700" title="Gold"></button>
+              <button class="swatch" data-color="#ffffff" style="background:#ffffff" title="White"></button>
+              <button class="swatch" data-color="#9ca3af" style="background:#9ca3af" title="Gray"></button>
+              <button class="swatch" data-color="#f87171" style="background:#f87171" title="Red"></button>
+              <button class="swatch" data-color="#34d399" style="background:#34d399" title="Green"></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="glass-section">
+          <button type="button" class="section-toggle label-caps">Stroke</button>
+          <div class="section-body">
+            <input type="range" id="stroke-size" min="2" max="24" value="12" />
+            <span id="stroke-label">12px</span>
+          </div>
+        </section>
+
+        <section class="glass-section">
+          <button type="button" class="section-toggle label-caps">Snap Geometry</button>
+          <div class="section-body snap-row">
+            <button class="pill-btn pill-btn--toggle action-btn" id="btn-snap-circle">Circle</button>
+            <button class="pill-btn pill-btn--toggle action-btn" id="btn-snap-rect">Square</button>
+            <button class="pill-btn pill-btn--toggle action-btn" id="btn-snap-line">Line</button>
+          </div>
+        </section>
+
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right floating control panels -->
+    <div id="control-panels">
+      <section class="float-card glass chrome">
+        <h3 class="label-caps">Intelligence</h3>
+        <button class="pill-btn pill-btn--gold action-btn" id="btn-recognize">Read Canvas Text</button>
+        <button class="pill-btn action-btn" id="btn-auto-snap">Auto-Snap Shapes</button>
+        <button class="pill-btn action-btn" id="btn-export">Export PNG</button>
+      </section>
+
+      <section class="float-card glass chrome">
+        <h3 class="label-caps">Feed Config</h3>
+        <label class="toggle-row" for="btn-camera-toggle">
+          <span>Mirror Mode</span>
+          <button type="button" class="toggle-switch active" id="btn-camera-toggle" aria-pressed="true">
+            <span class="toggle-knob"></span>
+          </button>
+        </label>
+      </section>
+
+      <section class="float-card glass chrome float-card--danger">
+        <button class="pill-btn pill-btn--danger action-btn" id="btn-clear">
+          <span class="btn-icon-left">🗑</span>
+          Clear Canvas
+        </button>
+      </section>
+    </div>
+
+    <!-- PDF fullscreen overlay UI -->
+    <div id="pdf-fullscreen-ui" class="hidden" aria-hidden="true">
+      <aside id="pdf-fs-toolbar" class="glass chrome">
+        <h3 class="label-caps">Annotate</h3>
+
+        <div class="pdf-fs-section">
+          <span class="pdf-fs-label">Stroke</span>
+          <input type="range" id="fs-stroke-size" min="2" max="24" value="12" />
+          <span id="fs-stroke-label">12px</span>
+        </div>
+
+        <div class="pdf-fs-section">
+          <span class="pdf-fs-label">Color</span>
+          <div id="fs-color-swatches" class="fs-color-swatches">
+            <button type="button" class="swatch fs-swatch active" data-color="#FFD700" style="background:#FFD700" title="Gold"></button>
+            <button type="button" class="swatch fs-swatch" data-color="#ffffff" style="background:#ffffff" title="White"></button>
+            <button type="button" class="swatch fs-swatch" data-color="#9ca3af" style="background:#9ca3af" title="Gray"></button>
+            <button type="button" class="swatch fs-swatch" data-color="#f87171" style="background:#f87171" title="Red"></button>
+            <button type="button" class="swatch fs-swatch" data-color="#34d399" style="background:#34d399" title="Green"></button>
+          </div>
+        </div>
+
+        <button type="button" class="pill-btn pill-btn--danger pdf-fs-close" id="btn-pdf-fs-close">
+          <span class="pdf-fs-close-icon">✕</span>
+          Close Fullscreen
+        </button>
+      </aside>
+
+      <div id="camera-feed-pip" class="glass chrome">
+        <video id="pip-webcam" autoplay playsinline muted></video>
+        <div class="pip-feed-label">Live Camera</div>
+      </div>
+    </div>
+
+    <!-- Bottom status bar -->
+    <footer id="status-bar" class="glass chrome">
+      <span id="gesture-label">Show your hand to start</span>
+      <span id="mode-indicator">100% · 0°</span>
+      <span id="fps-counter">-- FPS</span>
+      <span class="live-badge"><span class="live-dot"></span>Live</span>
+    </footer>
+  </main>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
