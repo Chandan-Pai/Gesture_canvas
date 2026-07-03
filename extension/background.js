@@ -616,80 +616,112 @@ async function navigatePresentationTab(direction) {
 
   try {
     await chrome.scripting.executeScript({
-      target: { tabId, allFrames: false },
+      target: { tabId, allFrames: true },
       world: 'MAIN',
       func: (dir) => {
         const isNext = dir === 'next';
+        const topWin = window.top;
+        const t = Date.now();
+        if (topWin.__gcSlideNavLock && t - topWin.__gcSlideNavLock < 400) return;
 
-        function matchesNav(label) {
-          const text = label.toLowerCase();
-          if (isNext) {
-            if (text.includes('last') || text.includes('end')) return false;
-            return (
-              text.includes('next slide') ||
-              text.includes('go to next') ||
-              /\bnext\b/.test(text)
-            );
-          }
-          return (
-            text.includes('previous slide') ||
-            text.includes('go to previous') ||
-            text.includes('prev') ||
-            /\bprevious\b/.test(text)
-          );
+        const VIEWER_SEL =
+          '.punch-viewer-content, .punch-viewer, .punch-viewer-navigate-right, .punch-viewer-navigate-left';
+
+        function hasViewer(doc) {
+          return !!doc?.querySelector(VIEWER_SEL);
         }
 
-        for (const btn of document.querySelectorAll(
-          'button, [role="button"], [data-tooltip], [aria-label]',
-        )) {
-          const label = [
-            btn.getAttribute('aria-label'),
-            btn.getAttribute('data-tooltip'),
-            btn.getAttribute('title'),
-          ]
-            .filter(Boolean)
-            .join(' ');
-          if (label && matchesNav(label)) {
-            btn.click();
-            return;
-          }
-        }
+        if (!hasViewer(document)) return;
 
-        const spec = isNext
-          ? { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39 }
-          : { key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37 };
-        const init = {
-          ...spec,
-          which: spec.keyCode,
-          bubbles: true,
-          cancelable: true,
-        };
-
-        function fireInWindow(win) {
-          const doc = win.document;
-          if (!doc) return false;
-          const focusTarget =
-            doc.querySelector('.punch-viewer-content, .punch-viewer, [role="main"]') ||
-            doc.activeElement ||
-            doc.body;
-          if (focusTarget?.focus) {
+        // Prefer the iframe that actually hosts the deck over the editor shell.
+        if (window === topWin) {
+          for (const iframe of document.querySelectorAll('iframe')) {
             try {
-              focusTarget.focus({ preventScroll: true });
+              if (hasViewer(iframe.contentDocument)) return;
             } catch {
-              focusTarget.focus();
+              /* cross-origin — that frame will handle navigation itself */
             }
           }
-          focusTarget?.dispatchEvent(new KeyboardEvent('keydown', init));
-          focusTarget?.dispatchEvent(new KeyboardEvent('keyup', init));
+        }
+
+        topWin.__gcSlideNavLock = t;
+
+        function clickSlidesChrome(doc) {
+          const navClass = isNext
+            ? '.punch-viewer-navigate-right'
+            : '.punch-viewer-navigate-left';
+          const navEl = doc.querySelector(navClass);
+          if (navEl) {
+            navEl.click();
+            return true;
+          }
+
+          const labels = isNext
+            ? ['next slide', 'go to next', 'next']
+            : ['previous slide', 'go to previous', 'previous', 'prev'];
+          for (const btn of doc.querySelectorAll(
+            'button[aria-label], [role="button"][aria-label], [data-tooltip]',
+          )) {
+            const label = (
+              btn.getAttribute('aria-label') ||
+              btn.getAttribute('data-tooltip') ||
+              ''
+            )
+              .toLowerCase()
+              .trim();
+            if (!label) continue;
+            if (isNext && (label.includes('last') || label.includes('end'))) continue;
+            if (labels.some((needle) => label.includes(needle))) {
+              btn.click();
+              return true;
+            }
+          }
+          return false;
+        }
+
+        function firePresentationKeys(win) {
+          const doc = win.document;
+          if (!doc) return false;
+
+          const viewer =
+            doc.querySelector('.punch-viewer-content, .punch-viewer') ||
+            doc.activeElement ||
+            doc.body;
+
+          if (viewer?.focus) {
+            try {
+              viewer.focus({ preventScroll: true });
+            } catch {
+              viewer.focus();
+            }
+          }
+
+          const spec = isNext
+            ? { key: 'PageDown', code: 'PageDown', keyCode: 34 }
+            : { key: 'PageUp', code: 'PageUp', keyCode: 33 };
+
+          const init = {
+            key: spec.key,
+            code: spec.code,
+            keyCode: spec.keyCode,
+            which: spec.keyCode,
+            bubbles: true,
+            cancelable: true,
+          };
+
+          const targets = [win, doc, doc.documentElement, doc.body, viewer].filter(
+            (el) => el && typeof el.dispatchEvent === 'function',
+          );
+
+          for (const target of targets) {
+            target.dispatchEvent(new KeyboardEvent('keydown', init));
+            target.dispatchEvent(new KeyboardEvent('keyup', init));
+          }
           return true;
         }
 
-        if (fireInWindow(window)) return;
-
-        const iframe = document.querySelector(
-          'iframe.punch-present-iframe, iframe[src*="presentation"], iframe[src*="punch"]',
-        );
-        if (iframe?.contentWindow) fireInWindow(iframe.contentWindow);
+        const doc = document;
+        if (!clickSlidesChrome(doc)) firePresentationKeys(window);
       },
       args: [direction],
     });

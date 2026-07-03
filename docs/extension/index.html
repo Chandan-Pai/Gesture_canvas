@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chrome Extension — Gesture Canvas</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+</head>
+<body>
+  <div class="site-wrap">
+    <header id="compact-bar" class="compact visible">
+      <strong>Gesture Canvas</strong>
+      <nav>
+        <a href="../">Home</a>
+        <a href="../app/">Demo</a>
+        <a href="../extension/">Extension</a>
+        <a href="../feedback/">Feedback</a>
+        <a href="https://github.com/Chandan-Pai/Gesture_canvas">GitHub</a>
+      </nav>
+    </header>
+
+    <div class="page-header">
+      <h1>Chrome extension</h1>
+      <p>Laser pointer and ink overlay for shared tabs in Google Meet, Zoom, and Teams.</p>
+    </div>
+
+    <main>
+      <h2>Features</h2>
+      <ul>
+        <li><strong>Tab mode (recommended)</strong> — overlay on a shared Slides/Meet tab; camera in side panel</li>
+        <li><strong>Screen pointer</strong> — fullscreen overlay; share entire screen in Meet</li>
+        <li><strong>Pointer / Write / Off</strong> — laser, pen, arrow, box, erase, slide navigation</li>
+        <li><strong>Collaboration</strong> — multiple companions per session (unique laser colors)</li>
+      </ul>
+
+      <h2>Install</h2>
+      <ol>
+        <li>Clone <a href="https://github.com/Chandan-Pai/Gesture_canvas">the repo</a></li>
+        <li>Chrome → <code>chrome://extensions</code> → enable <strong>Developer mode</strong></li>
+        <li><strong>Load unpacked</strong> → select the <code>extension/</code> folder</li>
+        <li>After updates, click <strong>Reload</strong> on the extension card</li>
+      </ol>
+
+      <h2>Google Slides + Meet (tab mode)</h2>
+      <ol>
+        <li>Open Google Slides → <strong>Present → Present in this tab</strong></li>
+        <li>Extension popup → <strong>Start on this tab</strong> (side panel opens)</li>
+        <li>Allow camera in the grant tab; keep the side panel open</li>
+        <li>In Meet → <strong>Present this tab</strong></li>
+        <li><strong>Pointer</strong>: index finger = red laser</li>
+        <li><strong>🤟 Three fingers</strong>: toggle Write mode (draw / erase)</li>
+        <li><strong>👍 / 👎</strong>: next / previous slide (hold, then release)</li>
+      </ol>
+
+      <div class="card">
+        <h3>Camera permission</h3>
+        <p>
+          Camera runs on the <strong>extension origin</strong>, not docs.google.com.
+          Use the grant tab when prompted — allowing camera on Slides alone does not enable gestures.
+        </p>
+      </div>
+
+      <h2>Webinar mode (entire screen)</h2>
+      <ol>
+        <li>Extension popup → <strong>Start screen pointer</strong></li>
+        <li>Open <a href="../companion/">gesture controller</a> with session ID from popup</li>
+        <li>In Meet → <strong>Present now → Entire screen</strong></li>
+        <li>Point with index finger — laser appears over the shared screen</li>
+      </ol>
+
+      <h2>Gesture reference</h2>
+      <table class="gesture-table">
+        <thead>
+          <tr><th>Gesture</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>☝ Index</td><td>Laser (Pointer) / draw (Write)</td></tr>
+          <tr><td>✌ Peace</td><td>Erase ink (Write only)</td></tr>
+          <tr><td>🤟 Three fingers</td><td>Toggle Pointer ↔ Write</td></tr>
+          <tr><td>🤏 Pinch</td><td>Laser / pan ink</td></tr>
+          <tr><td>⊕ Two-hand pinch</td><td>Zoom ink</td></tr>
+          <tr><td>✊ Fist</td><td>Finish stroke</td></tr>
+          <tr><td>🖐 Open palm (1s)</td><td>Reset view</td></tr>
+          <tr><td>👍 / 👎</td><td>Next / previous slide</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Local dev (optional relay)</h2>
+      <pre style="background:#151820;padding:12px;border-radius:8px;font-size:13px;overflow:auto;margin-top:8px;color:#9ca3af"><code>npm install
+npm run dev</code></pre>
+      <p style="margin-top:8px">
+        Open <code>https://localhost:3000</code> once and accept the certificate.
+        Companion URL:
+        <code>https://localhost:3000/companion/?session=YOUR_ID</code>
+      </p>
+
+      <h2>Troubleshooting</h2>
+      <table class="gesture-table">
+        <thead>
+          <tr><th>Issue</th><th>Fix</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pointer not in Meet</td><td>Share <strong>this tab</strong> or <strong>entire screen</strong> (not a window only)</td></tr>
+          <tr><td>Slides won’t advance</td><td>Use <strong>Present in this tab</strong>, not edit mode</td></tr>
+          <tr><td>No gestures</td><td>Keep side panel open; reload extension + refresh Slides tab</td></tr>
+          <tr><td>Camera blocked</td><td>Use the grant tab; check Chrome site settings for the extension</td></tr>
+        </tbody>
+      </table>
+
+      <footer class="site-footer">
+        <a href="../">← Home</a>
+        <a href="../feedback/">Send feedback</a>
+        <a href="https://github.com/Chandan-Pai/Gesture_canvas/tree/main/extension">Source on GitHub</a>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

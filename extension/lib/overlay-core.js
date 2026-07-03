@@ -430,6 +430,7 @@ export function createOverlayController({
     lastTwoHandSep = null;
 
     if (gesture === 'THUMBS_UP') {
+      dispatchSlideKey('next');
       showBanner(true, 'Next slide');
       setTimeout(() => showBanner(false), 800);
       prevGesture = gesture;
@@ -437,6 +438,7 @@ export function createOverlayController({
     }
 
     if (gesture === 'THUMBS_DOWN') {
+      dispatchSlideKey('prev');
       showBanner(true, 'Previous slide');
       setTimeout(() => showBanner(false), 800);
       prevGesture = gesture;

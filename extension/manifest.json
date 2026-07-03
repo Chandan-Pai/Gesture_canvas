@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Gesture Canvas",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Gesture overlay for webinars and shared tabs — pointer, annotate, collaborate.",
   "permissions": ["activeTab", "scripting", "storage", "tabs", "downloads", "windows", "system.display", "sidePanel", "webNavigation"],
   "host_permissions": [

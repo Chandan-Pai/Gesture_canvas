@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback — Gesture Canvas</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+</head>
+<body>
+  <div class="site-wrap">
+    <header id="compact-bar" class="compact visible">
+      <strong>Gesture Canvas</strong>
+      <nav>
+        <a href="../">Home</a>
+        <a href="../app/">Demo</a>
+        <a href="../extension/">Extension</a>
+        <a href="../feedback/">Feedback</a>
+      </nav>
+    </header>
+
+    <div class="page-header">
+      <h1>Feedback</h1>
+      <p>Help us improve Gesture Canvas — ratings, bugs, and feature ideas welcome.</p>
+    </div>
+
+    <main>
+      <div id="feedback-root">
+        <p class="feedback-placeholder">Loading form…</p>
+      </div>
+
+      <p style="margin-top:16px;font-size:13px;color:#9ca3af">
+        Prefer a new tab?
+        <a id="feedback-link" href="#" target="_blank" rel="noopener">Open form in Google Forms</a>
+      </p>
+
+      <footer class="site-footer">
+        <a href="../">← Home</a>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module">
+    import { FEEDBACK_FORM_URL, feedbackEmbedUrl } from '../site-config.js';
+
+    const root = document.getElementById('feedback-root');
+    const link = document.getElementById('feedback-link');
+
+    const isPlaceholder = FEEDBACK_FORM_URL.includes('REPLACE_WITH_YOUR_FORM_ID');
+
+    if (isPlaceholder) {
+      root.innerHTML = `
+        <div class="card feedback-placeholder">
+          <p><strong>Form URL not configured yet.</strong></p>
+          <p style="margin-top:10px">
+            Edit <code>docs/site-config.js</code> and set
+            <code>FEEDBACK_FORM_URL</code> to your Google Form link.
+          </p>
+          <p style="margin-top:10px">
+            Create a form at
+            <a href="https://forms.google.com" target="_blank" rel="noopener">forms.google.com</a>
+            → Send → copy link.
+          </p>
+        </div>`;
+      link.style.display = 'none';
+    } else {
+      link.href = FEEDBACK_FORM_URL;
+      root.innerHTML = `
+        <iframe
+          class="feedback-frame"
+          src="${feedbackEmbedUrl()}"
+          title="Gesture Canvas feedback form"
+        >Loading…</iframe>`;
+    }
+  </script>
+</body>
+</html>
