@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gesture Canvas</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <strong>Gesture Canvas</strong>
+    <span id="status-dot" class="dot off"></span>
+  </header>
+
+  <section id="idle">
+    <button id="btn-screen" class="primary">Start screen pointer</button>
+    <p class="hint">Webinar mode — share <strong>Entire screen</strong> in Meet, then open gesture controller.</p>
+
+    <div class="divider">or</div>
+
+    <label>
+      Session name
+      <input id="session-name" type="text" placeholder="Study-04-checkout" />
+    </label>
+    <button id="btn-start" class="ghost">Start on this tab</button>
+    <p class="hint">Opens the <strong>presenter panel</strong> beside your tab. Click <strong>Allow camera</strong> — a permission tab opens (not Google Slides settings).</p>
+
+    <button id="btn-companion" class="ghost">Open presenter panel</button>
+    <p class="hint small">Companion: <code id="phone-url">…</code></p>
+  </section>
+
+  <section id="active" class="hidden">
+    <p class="badge" id="surface-badge">tab</p>
+    <p class="session-id">ID: <code id="session-id"></code></p>
+    <p class="hint" id="session-label"></p>
+    <p class="hint screen-steps hidden" id="tab-steps">
+      <strong>Meet:</strong> Present → <strong>This tab</strong>. Use the side panel for camera — viewers only see the slide + red pointer.
+    </p>
+    <p class="hint screen-steps hidden" id="screen-steps">
+      <strong>Meet:</strong> Present → Entire screen (this monitor) → open gesture controller below.
+    </p>
+    <button id="btn-copy-link" class="ghost">Copy companion link</button>
+    <button id="btn-companion-active" class="ghost">Presenter panel</button>
+    <button id="btn-export" class="primary">Export PNG</button>
+    <button id="btn-end" class="danger">End session</button>
+  </section>
+
+  <p id="error" class="error hidden"></p>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0a0c12;
+  color: #e8eaef;
+  padding: 10px;
+  min-width: 260px;
+}
+
+header {
+  margin-bottom: 8px;
+}
+
+header strong {
+  font-size: 13px;
+}
+
+header p {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 6px !important;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 26, 26, 0.15);
+  color: #ff6b6b !important;
+  font-size: 10px !important;
+  font-weight: 600;
+}
+
+#webcam {
+  width: 100%;
+  border-radius: 10px;
+  background: #111;
+  transform: scaleX(-1);
+  margin-top: 6px;
+  display: block;
+}
+
+.modes,
+.tools {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+button {
+  flex: 1;
+  padding: 8px 4px;
+  border: 1px solid #2d3140;
+  border-radius: 8px;
+  background: #151820;
+  color: #cbd5e1;
+  font-weight: 600;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+button.active {
+  border-color: #6366f1;
+  background: #1e1b4b;
+  color: #fff;
+}
+
+button[data-mode="pointer"].active {
+  border-color: #ff1a1a;
+  background: rgba(255, 26, 26, 0.2);
+  color: #ff6b6b;
+}
+
+.hint {
+  margin-top: 10px;
+  font-size: 10px;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.camera-permission {
+  margin-top: 8px;
+}
+
+.camera-card {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #2d3140;
+  background: #11141c;
+}
+
+.camera-card h2 {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.camera-warning {
+  margin-bottom: 8px !important;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 26, 26, 0.12);
+  color: #ffb4b4 !important;
+  font-size: 11px !important;
+}
+
+.camera-card p {
+  font-size: 11px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.camera-note {
+  margin-top: 8px !important;
+  font-size: 10px !important;
+  color: #6b7280 !important;
+}
+
+.camera-steps {
+  margin: 10px 0 12px 18px;
+  font-size: 11px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.camera-steps li {
+  margin-bottom: 6px;
+}
+
+.camera-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-primary,
+.btn-ghost {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  border: none;
+  background: #ff1a1a;
+  color: #fff;
+}
+
+.btn-ghost {
+  border: 1px solid #2d3140;
+  background: #151820;
+  color: #cbd5e1;
+}
+
+.camera-controls {
+  margin-top: 4px;
+}

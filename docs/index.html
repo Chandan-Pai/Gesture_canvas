@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gesture Canvas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0a0c12;
+      color: #e8eaef;
+      line-height: 1.5;
+      padding: 24px 16px 48px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 8px; }
+    h2 { font-size: 1rem; margin: 24px 0 8px; color: #a5b4fc; }
+    p, li { font-size: 14px; color: #9ca3af; }
+    ul { padding-left: 1.2rem; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    a { color: #818cf8; }
+    .cta {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 20px;
+      background: #6366f1;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    code {
+      font-size: 12px;
+      background: #151820;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gesture Canvas</h1>
+  <p>Hand-gesture laser pointer and annotations for webinars and screen sharing.</p>
+
+  <a class="cta" href="companion/">Open Gesture Controller</a>
+
+  <h2>Try it (host)</h2>
+  <ol>
+    <li>Clone the repo and load the Chrome extension from <code>extension/</code></li>
+    <li>Run <code>npm run dev</code> for the local WebSocket relay</li>
+    <li>Click <strong>Start screen pointer</strong> in the extension popup</li>
+    <li>In Meet: share <strong>Entire screen</strong></li>
+    <li>Open the gesture controller and enter the session ID from the popup</li>
+  </ol>
+
+  <h2>Collaborate (guest)</h2>
+  <p>
+    Host shares the companion link with session ID (and relay URL if not using localhost).
+    Each guest opens the controller on phone or laptop — unique laser colors per participant.
+  </p>
+
+  <h2>Hosted relay (Phase 3)</h2>
+  <p>
+    Deploy <code>relay/standalone-relay.mjs</code>, then set
+    <code>GC_PUBLIC_WS</code> in <code>extension/lib/gc-config.js</code> and
+    <code>docs/lib/gc-config.js</code>.
+  </p>
+
+  <p style="margin-top:24px">
+    <a href="https://github.com/chandanpai/Gesture_canvas">GitHub repository</a>
+  </p>
+</body>
+</html>

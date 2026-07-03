@@ -1,0 +1,23 @@
+{
+  "name": "gesture-canvas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server/dev-server.mjs",
+    "start": "node server/dev-server.mjs",
+    "relay": "node relay/standalone-relay.mjs",
+    "sync:devlog": "node scripts/sync-devlog-to-notion.mjs",
+    "sync:devlog:dry": "node scripts/sync-devlog-to-notion.mjs --dry-run",
+    "sync:vendor": "mkdir -p extension/vendor/mediapipe/hands extension/vendor/mediapipe/camera_utils && cp node_modules/@mediapipe/hands/* extension/vendor/mediapipe/hands/ && cp node_modules/@mediapipe/camera_utils/* extension/vendor/mediapipe/camera_utils/"
+  },
+  "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/hands": "^0.4.1675469240",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/hands": "^0.4.1675469240",
+    "@notionhq/client": "^2.3.0",
+    "@tryfabric/martian": "^1.2.4",
+    "ws": "^8.18.0"
+  }
+}

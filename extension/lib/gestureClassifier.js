@@ -49,11 +49,63 @@ function fingerExtension(landmarks) {
   };
 }
 
+function isFingerClearlyDown(landmarks, tipIdx, pipIdx) {
+  return landmarks[tipIdx].y > landmarks[pipIdx].y + 0.006;
+}
+
+function isFingerClearlyUp(landmarks, tipIdx, pipIdx) {
+  return landmarks[tipIdx].y < landmarks[pipIdx].y - 0.006;
+}
+
+function nonThumbFingersCurled(landmarks) {
+  return (
+    isFingerClearlyDown(landmarks, 8, 6) &&
+    isFingerClearlyDown(landmarks, 12, 10) &&
+    isFingerClearlyDown(landmarks, 16, 14) &&
+    isFingerClearlyDown(landmarks, 20, 18)
+  );
+}
+
+export function isPeaceSignPose(landmarks) {
+  if (!landmarks || landmarks.length < 21) return false;
+  return (
+    isFingerClearlyUp(landmarks, 8, 6) &&
+    isFingerClearlyUp(landmarks, 12, 10) &&
+    isFingerClearlyDown(landmarks, 16, 14) &&
+    isFingerClearlyDown(landmarks, 20, 18)
+  );
+}
+
+function thumbSpreadRatio(landmarks) {
+  return dist(landmarks[4], landmarks[5]) / handScale(landmarks);
+}
+
+export function isThumbsUpPose(landmarks) {
+  if (!landmarks || landmarks.length < 21) return false;
+  if (!nonThumbFingersCurled(landmarks)) return false;
+  if (thumbSpreadRatio(landmarks) < 0.52) return false;
+  if (pinchRatio(landmarks) < 0.52) return false;
+  const thumbTipUp = landmarks[4].y < landmarks[3].y - 0.008;
+  const thumbAboveKnuckle = landmarks[4].y < landmarks[2].y;
+  return thumbTipUp && thumbAboveKnuckle;
+}
+
+export function isThumbsDownPose(landmarks) {
+  if (!landmarks || landmarks.length < 21) return false;
+  if (!nonThumbFingersCurled(landmarks)) return false;
+  if (thumbSpreadRatio(landmarks) < 0.52) return false;
+  if (pinchRatio(landmarks) < 0.52) return false;
+  const thumbTipDown = landmarks[4].y > landmarks[3].y + 0.008;
+  const thumbBelowKnuckle = landmarks[4].y > landmarks[2].y + 0.005;
+  return thumbTipDown && thumbBelowKnuckle;
+}
+
 export function isFistPose(landmarks) {
-  const { indexUp, middleUp, ringUp, pinkyUp } = fingerExtension(landmarks);
-  if (indexUp || middleUp || ringUp || pinkyUp) return false;
-  // Closed fist: thumb not meeting index (avoids fist → pinch)
-  return pinchRatio(landmarks) > 0.52;
+  if (!landmarks || landmarks.length < 21) return false;
+  if (!nonThumbFingersCurled(landmarks)) return false;
+  if (isThumbsUpPose(landmarks) || isThumbsDownPose(landmarks)) return false;
+  // Tucked thumb against curled fingers
+  return thumbSpreadRatio(landmarks) < 0.68 || pinchRatio(landmarks) < 0.72;
 }
 
 export function isOpenPalmPose(landmarks) {
@@ -72,8 +124,17 @@ export const PINCH_TOUCH_RATIO = 0.42;
 
 export function isPinchPose(landmarks, threshold = PINCH_TOUCH_RATIO) {
   if (!landmarks || landmarks.length < 21) return false;
-  const { indexUp } = fingerExtension(landmarks);
-  if (!indexUp) return false;
+  if (!isFingerClearlyUp(landmarks, 8, 6)) return false;
+  // Peace sign (index + middle up) is never pinch
+  if (isFingerClearlyUp(landmarks, 12, 10)) return false;
+  // Curled hand + extended thumb = thumbs up/down, not pinch
+  if (nonThumbFingersCurled(landmarks)) return false;
+  // Index only raised, thumb far away = draw/point, not pinch
+  const othersCurled =
+    isFingerClearlyDown(landmarks, 12, 10) &&
+    isFingerClearlyDown(landmarks, 16, 14) &&
+    isFingerClearlyDown(landmarks, 20, 18);
+  if (othersCurled && pinchRatio(landmarks) > 0.48) return false;
   return pinchRatio(landmarks) < threshold;
 }
 
@@ -81,24 +142,6 @@ export function isThreeFingerPose(landmarks) {
   if (!landmarks || landmarks.length < 21) return false;
   const { indexUp, middleUp, ringUp, pinkyUp } = fingerExtension(landmarks);
   return indexUp && middleUp && ringUp && !pinkyUp;
-}
-
-export function isThumbsUpPose(landmarks) {
-  if (!landmarks || landmarks.length < 21) return false;
-  const { indexUp, middleUp, ringUp, pinkyUp } = fingerExtension(landmarks);
-  if (indexUp || middleUp || ringUp || pinkyUp) return false;
-  if (pinchRatio(landmarks) < 0.55) return false;
-  const thumbUpY = landmarks[4].y < landmarks[3].y - 0.015;
-  const thumbUpX = isThumbUp(landmarks);
-  return thumbUpY || thumbUpX;
-}
-
-export function isThumbsDownPose(landmarks) {
-  if (!landmarks || landmarks.length < 21) return false;
-  const { indexUp, middleUp, ringUp, pinkyUp } = fingerExtension(landmarks);
-  if (indexUp || middleUp || ringUp || pinkyUp) return false;
-  if (pinchRatio(landmarks) < 0.55) return false;
-  return landmarks[4].y > landmarks[2].y + 0.02;
 }
 
 export function pinchMidpoint(landmarks) {
@@ -130,28 +173,15 @@ export function classifyGesture(landmarks) {
     y: (landmarks[8].y + landmarks[4].y) / 2,
   };
 
-  if (isPinchPose(landmarks)) {
-    return {
-      gesture: Gesture.PINCH,
-      drawPoint: pinchPoint,
-      pinchDist,
-      pinchRatio: ratio,
-    };
-  }
-
-  if (indexUp && middleUp && ringUp && pinkyUp) {
+  if (isOpenPalmPose(landmarks)) {
     return { gesture: Gesture.OPEN_PALM, drawPoint: null, pinchDist, pinchRatio: ratio };
-  }
-
-  if (isFistPose(landmarks)) {
-    return { gesture: Gesture.FIST, drawPoint: null, pinchDist, pinchRatio: ratio };
   }
 
   if (isThreeFingerPose(landmarks)) {
     return { gesture: Gesture.THREE_FINGER, drawPoint: null, pinchDist, pinchRatio: ratio };
   }
 
-  if (indexUp && middleUp && !ringUp && !pinkyUp) {
+  if (isPeaceSignPose(landmarks)) {
     return {
       gesture: Gesture.ERASE,
       drawPoint: {
@@ -169,6 +199,19 @@ export function classifyGesture(landmarks) {
 
   if (isThumbsDownPose(landmarks)) {
     return { gesture: Gesture.THUMBS_DOWN, drawPoint: null, pinchDist, pinchRatio: ratio };
+  }
+
+  if (isPinchPose(landmarks)) {
+    return {
+      gesture: Gesture.PINCH,
+      drawPoint: pinchPoint,
+      pinchDist,
+      pinchRatio: ratio,
+    };
+  }
+
+  if (isFistPose(landmarks)) {
+    return { gesture: Gesture.FIST, drawPoint: null, pinchDist, pinchRatio: ratio };
   }
 
   if (indexUp && !middleUp) {

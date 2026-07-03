@@ -1,0 +1,116 @@
+:host {
+  all: initial;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+#gc-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+#gc-root.interactive {
+  pointer-events: auto;
+}
+
+#gc-laser,
+#gc-ink {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2147483645;
+}
+
+#gc-toolbar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  z-index: 2147483647;
+}
+
+#gc-modes,
+#gc-tools {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(10, 12, 18, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+#gc-tools.hidden {
+  display: none;
+}
+
+#gc-toolbar button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+#gc-toolbar button:hover {
+  color: #e8eaef;
+}
+
+#gc-toolbar button.active {
+  background: rgba(99, 102, 241, 0.45);
+  color: #fff;
+}
+
+#gc-toolbar button[data-mode="pointer"].active {
+  background: rgba(255, 26, 26, 0.28);
+  color: #ff1a1a;
+}
+
+#gc-toolbar button[data-mode="write"].active {
+  background: rgba(56, 189, 248, 0.28);
+  color: #38bdf8;
+}
+
+#gc-toolbar button[data-tool].active {
+  background: rgba(56, 189, 248, 0.28);
+  color: #38bdf8;
+}
+
+#gc-banner {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.85);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+#gc-banner.show {
+  opacity: 1;
+}

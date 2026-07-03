@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Gesture Canvas",
+  "version": "0.6.0",
+  "description": "Gesture overlay for webinars and shared tabs — pointer, annotate, collaborate.",
+  "permissions": ["activeTab", "scripting", "storage", "tabs", "downloads", "windows", "system.display", "sidePanel", "webNavigation"],
+  "host_permissions": [
+    "https://localhost:3000/*",
+    "https://127.0.0.1:3000/*",
+    "https://*.github.io/*",
+    "<all_urls>"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://localhost:3000/companion*",
+        "https://localhost:3000/relay-client.html*",
+        "https://127.0.0.1:3000/companion*",
+        "https://127.0.0.1:3000/relay-client.html*",
+        "https://*.github.io/*/companion/*",
+        "https://*.github.io/*/companion"
+      ],
+      "js": ["content/companion-bridge.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Gesture Canvas"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/overlay.css",
+        "lib/overlay-core.js",
+        "lib/gc-config.js",
+        "lib/slide-nav.js",
+        "vendor/mediapipe/hands/*",
+        "vendor/mediapipe/camera_utils/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

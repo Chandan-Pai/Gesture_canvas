@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Gesture Controller</title>
+  <link rel="stylesheet" href="/extension/companion/companion.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <strong>Gesture Controller</strong>
+    <p id="status">Starting…</p>
+  </header>
+
+  <label>
+    Session ID (from extension popup)
+    <input id="session-id" type="text" placeholder="abc12xyz" autocomplete="off" />
+  </label>
+
+  <label class="advanced">
+    Relay WebSocket (optional)
+    <input id="relay-url" type="text" placeholder="wss://localhost:3000/ws" autocomplete="off" />
+  </label>
+
+  <video id="webcam" autoplay playsinline muted></video>
+
+  <section class="modes">
+    <button type="button" data-mode="off">Off</button>
+    <button type="button" data-mode="pointer" class="active">Pointer</button>
+    <button type="button" data-mode="write">Write</button>
+  </section>
+
+  <section class="tools">
+    <button type="button" data-tool="pen" class="active">Pen</button>
+    <button type="button" data-tool="arrow">Arrow</button>
+    <button type="button" data-tool="box">Box</button>
+  </section>
+
+  <p class="hint">☝ point · ✌ erase · 🤟 mode · 🤏 pinch · 👍/👎 slides · ✊ stop · 🖐 reset</p>
+
+  <script type="module">
+    import { initGestureController } from '/extension/companion/gesture-controller.js';
+    import { resolveRelayWs } from '/extension/lib/gc-config.js';
+
+    const statusEl = document.getElementById('status');
+    const videoEl = document.getElementById('webcam');
+    const sessionInput = document.getElementById('session-id');
+    const relayInput = document.getElementById('relay-url');
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('session')) sessionInput.value = params.get('session');
+    relayInput.value = resolveRelayWs(params);
+
+    const ctrl = await initGestureController({
+      videoEl,
+      statusEl,
+      sessionInput,
+      searchParams: params,
+      wsUrl: relayInput.value.trim() || undefined,
+      onSessionId: (id) => {
+        if (id) ctrl.connectWs(id);
+      },
+    });
+
+    relayInput.addEventListener('change', () => {
+      const id = sessionInput.value.trim();
+      if (id) ctrl.connectWs(id);
+    });
+
+    ctrl.bindModeButtons(document.body);
+
+    if (sessionInput.value.trim()) {
+      ctrl.connectWs(sessionInput.value.trim());
+    }
+  </script>
+</body>
+</html>

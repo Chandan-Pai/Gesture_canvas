@@ -1,0 +1,81 @@
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0a0c12;
+  color: #e8eaef;
+  padding: 12px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+#webcam {
+  width: 100%;
+  border-radius: 12px;
+  background: #111;
+  transform: scaleX(-1);
+}
+
+.modes,
+.tools {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 10px 6px;
+  border: 1px solid #2d3140;
+  border-radius: 10px;
+  background: #151820;
+  color: #cbd5e1;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+button.active {
+  border-color: #6366f1;
+  background: #1e1b4b;
+  color: #fff;
+}
+
+.hint {
+  margin-top: 12px;
+  font-size: 10px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #2d3140;
+  background: #111;
+  color: #fff;
+}
+
+label {
+  display: block;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 8px;
+}
+
+label.advanced input {
+  font-size: 10px;
+  color: #a5b4fc;
+}

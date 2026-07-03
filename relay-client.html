@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gesture Canvas Relay</title>
+</head>
+<body>
+  <p id="status" style="font:12px system-ui;color:#666;padding:8px">Connecting relay…</p>
+  <script>
+    const status = document.getElementById('status');
+    const params = new URLSearchParams(location.search);
+    const sessionId = params.get('session');
+    const WS_URL = params.get('relay') || 'wss://localhost:3000/ws';
+
+    function post(type, payload) {
+      window.postMessage({ source: 'gesture-canvas', gcType: type, payload }, '*');
+    }
+
+    if (!sessionId) {
+      status.textContent = 'Missing session id';
+    } else {
+      const ws = new WebSocket(WS_URL);
+      ws.onopen = () => {
+        ws.send(JSON.stringify({ type: 'join', role: 'extension', sessionId }));
+        status.textContent = `Relay active · ${sessionId}`;
+      };
+      ws.onmessage = (ev) => {
+        try {
+          const msg = JSON.parse(ev.data);
+          if (msg.type === 'gesture') {
+            post('companion-gesture', {
+              gesture: msg.gesture,
+              nx: msg.nx,
+              ny: msg.ny,
+              mode: msg.mode,
+              tool: msg.tool,
+              participantId: msg.participantId,
+            });
+          } else if (msg.type === 'mode') {
+            post('companion-mode', { mode: msg.mode, tool: msg.tool });
+          }
+        } catch { /* ignore */ }
+      };
+      ws.onclose = () => {
+        status.textContent = 'Relay disconnected — run npm run dev';
+      };
+      ws.onerror = () => {
+        status.textContent = 'Relay error — open https://localhost:3000 once, then reload';
+      };
+    }
+  </script>
+</body>
+</html>

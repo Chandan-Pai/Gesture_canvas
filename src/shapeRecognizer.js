@@ -65,6 +65,45 @@ function resample(pts, n = 64) {
   return out;
 }
 
+function perpendicularDistance(pt, lineStart, lineEnd) {
+  const [x, y] = pt;
+  const [x1, y1] = lineStart;
+  const [x2, y2] = lineEnd;
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  if (dx === 0 && dy === 0) return distance(pt, lineStart);
+  return Math.abs(dy * x - dx * y + x2 * y1 - y2 * x1) / Math.hypot(dx, dy);
+}
+
+function douglasPeucker(pts, epsilon) {
+  if (pts.length <= 2) return pts;
+  let maxDist = 0;
+  let index = 0;
+  const end = pts.length - 1;
+  for (let i = 1; i < end; i++) {
+    const d = perpendicularDistance(pts[i], pts[0], pts[end]);
+    if (d > maxDist) {
+      maxDist = d;
+      index = i;
+    }
+  }
+  if (maxDist > epsilon) {
+    const left = douglasPeucker(pts.slice(0, index + 1), epsilon);
+    const right = douglasPeucker(pts.slice(index), epsilon);
+    return left.slice(0, -1).concat(right);
+  }
+  return [pts[0], pts[end]];
+}
+
+function simplifiedVertexCount(rawPts) {
+  const bb = boundingBox(rawPts);
+  const eps = Math.max(4, Math.hypot(bb.w, bb.h) * 0.055);
+  const simple = douglasPeucker(rawPts, eps);
+  if (simple.length <= 1) return simple.length;
+  const closes = distance(simple[0], simple[simple.length - 1]) < eps * 1.5;
+  return closes ? simple.length - 1 : simple.length;
+}
+
 // ── Circle detection ───────────────────────────────────────────────────
 
 /**
@@ -123,26 +162,67 @@ function lineScore(pts) {
   return lambda2 < 0.001 ? 1 : 1 - (lambda2 / lambda1);
 }
 
-// ── Triangle detection ─────────────────────────────────────────────────
+// ── Corner detection (shared by triangle / circle disambiguation) ───────
 
-function triangleScore(pts) {
-  // Approximate by finding inflection points (corners)
-  const sampled = resample(pts, 32);
-  let corners = 0;
+function turnAngles(pts) {
+  const sampled = resample(pts, 64);
   const windowSize = 4;
+  const turns = [];
+
   for (let i = windowSize; i < sampled.length - windowSize; i++) {
     const before = sampled[i - windowSize];
-    const p      = sampled[i];
-    const after  = sampled[i + windowSize];
+    const p = sampled[i];
+    const after = sampled[i + windowSize];
     const v1 = [p[0] - before[0], p[1] - before[1]];
     const v2 = [after[0] - p[0], after[1] - p[1]];
-    const dot = v1[0]*v2[0] + v1[1]*v2[1];
     const mag = Math.hypot(...v1) * Math.hypot(...v2);
     if (mag < 0.01) continue;
-    const cosAngle = dot / mag;
-    if (cosAngle < 0.5) corners++;  // angle > 60°
+    const cosAngle = (v1[0] * v2[0] + v1[1] * v2[1]) / mag;
+    const turnDeg = Math.acos(Math.max(-1, Math.min(1, cosAngle))) * (180 / Math.PI);
+    turns.push({ i, turnDeg });
   }
-  return corners >= 2 && corners <= 5 ? corners / 3 : 0;
+
+  return turns;
+}
+
+/** Local maxima of turn angle — one peak per vertex, not a run of samples. */
+function countCornerPeaks(pts, minTurnDeg = 55) {
+  const turns = turnAngles(pts);
+  if (turns.length < 3) return 0;
+
+  const peaks = [];
+  for (let i = 1; i < turns.length - 1; i++) {
+    const cur = turns[i];
+    if (cur.turnDeg < minTurnDeg) continue;
+    if (cur.turnDeg >= turns[i - 1].turnDeg && cur.turnDeg >= turns[i + 1].turnDeg) {
+      peaks.push(cur);
+    }
+  }
+
+  // Merge peaks that sit on the same corner (adjacent samples along the stroke).
+  let merged = 0;
+  let lastIdx = -Infinity;
+  for (const peak of peaks) {
+    if (peak.i - lastIdx > 5) {
+      merged++;
+      lastIdx = peak.i;
+    }
+  }
+  return merged;
+}
+
+function countCornersAbove(pts, minTurnDeg) {
+  return turnAngles(pts).filter((t) => t.turnDeg >= minTurnDeg).length;
+}
+
+// ── Triangle detection ─────────────────────────────────────────────────
+
+function triangleScore(cornerPeaks, simpleVerts, circRaw) {
+  if (simpleVerts === 3) return 0.95 - Math.max(0, circRaw - 0.6) * 0.5;
+  if (cornerPeaks === 3) return 1 - Math.max(0, circRaw - 0.62) * 0.9;
+  if (cornerPeaks === 2 && simpleVerts <= 4 && circRaw < 0.68) return 0.72;
+  if (cornerPeaks === 4 && circRaw < 0.72) return 0.55;
+  return 0;
 }
 
 // ── Main classify ──────────────────────────────────────────────────────
@@ -150,25 +230,57 @@ function triangleScore(pts) {
 export function classifyStroke(rawPts) {
   if (rawPts.length < 5) return { type: ShapeType.UNKNOWN, confidence: 0 };
 
-  const pts    = resample(rawPts, 64);
+  const pts = resample(rawPts, 64);
   const closed = isClosedStroke(pts);
-  const bb     = boundingBox(pts);
+  const bb = boundingBox(pts);
   const aspect = bb.w / Math.max(bb.h, 1);
   const roundAspect = aspect > 0.55 && aspect < 1.8;
   const circRaw = circularityScore(pts);
-  // Allow slightly open loops that still read as circles
-  const looksLikeCircle = closed || (roundAspect && circRaw > 0.58 && pts.length >= 16);
+  const cornerPeaks = countCornerPeaks(pts, 55);
+  const mildCorners = countCornersAbove(pts, 68);
+  const simpleVerts = closed ? simplifiedVertexCount(rawPts) : 0;
 
-  const circScore = looksLikeCircle ? circRaw : 0;
-  const rectScore = closed ? rectangularityScore(pts) : 0;
-  const triScore  = closed ? triangleScore(pts) : 0;
-  const lineScr   = !closed && !looksLikeCircle ? lineScore(pts) : 0;
+  // Circles: even radius from centroid, many vertices when simplified, no corner peaks.
+  const looksLikeCircle = closed || (roundAspect && circRaw > 0.58 && pts.length >= 16);
+  let circScore = 0;
+  if (
+    looksLikeCircle
+    && circRaw > 0.68
+    && cornerPeaks <= 1
+    && mildCorners <= 6
+    && simpleVerts !== 3
+    && (simpleVerts === 0 || simpleVerts >= 6)
+  ) {
+    circScore = circRaw * (1 - cornerPeaks * 0.2);
+  }
+
+  // Triangles: ~3 vertices after simplification or ~3 corner peaks.
+  let triScore = 0;
+  if (closed && circRaw < 0.82) {
+    if (simpleVerts === 3 || (cornerPeaks >= 2 && cornerPeaks <= 4)) {
+      triScore = triangleScore(cornerPeaks, simpleVerts, circRaw);
+    }
+  }
+
+  const rectScore = closed && simpleVerts === 4 && circRaw < 0.7
+    ? rectangularityScore(pts)
+    : 0;
+  const lineScr = !closed && !looksLikeCircle ? lineScore(pts) : 0;
+
+  // When both score, prefer the shape whose signature is stronger.
+  if (circScore > 0.5 && triScore > 0.5) {
+    if ((simpleVerts === 3 || cornerPeaks >= 2) && circRaw < 0.74) {
+      circScore *= 0.35;
+    } else if (cornerPeaks <= 1 && circRaw > 0.76 && simpleVerts >= 6) {
+      triScore *= 0.35;
+    }
+  }
 
   const scores = {
-    [ShapeType.CIRCLE]:    circScore,
+    [ShapeType.CIRCLE]: circScore,
     [ShapeType.RECTANGLE]: rectScore,
-    [ShapeType.TRIANGLE]:  triScore,
-    [ShapeType.LINE]:      lineScr,
+    [ShapeType.TRIANGLE]: triScore,
+    [ShapeType.LINE]: lineScr,
   };
 
   let best = ShapeType.UNKNOWN;
