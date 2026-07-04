@@ -301,6 +301,28 @@ code {
   background: #fff;
 }
 
+.use-case-list {
+  margin-top: 10px;
+  padding-left: 1.1rem;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.use-case-list li {
+  margin-bottom: 8px;
+}
+
+.use-case-list strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.lead {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
 .feedback-placeholder {
   padding: 24px;
   text-align: center;
