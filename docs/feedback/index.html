@@ -1,76 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Share feedback on Gesture Canvas — help us improve gestures, setup, and features." />
   <title>Feedback — Gesture Canvas</title>
-  <link rel="stylesheet" href="../assets/site.css" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="../assets/tailwind-config.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/docs-theme.css" />
 </head>
-<body>
-  <div class="site-wrap">
-    <header id="compact-bar" class="compact visible">
-      <strong>Gesture Canvas</strong>
-      <nav>
-        <a href="../">Home</a>
-        <a href="../app/">Demo</a>
-        <a href="../extension/">Extension</a>
-        <a href="../feedback/">Feedback</a>
-      </nav>
-    </header>
+<body class="bg-background text-on-background min-h-screen flex flex-col" data-docs-page="feedback">
 
-    <div class="page-header">
-      <h1>Feedback</h1>
-      <p>Help us improve Gesture Canvas — ratings, bugs, and feature ideas welcome.</p>
-    </div>
+  <div id="gc-header"></div>
 
-    <main>
-      <div id="feedback-root">
-        <p class="feedback-placeholder">Loading form…</p>
-      </div>
-
-      <p style="margin-top:16px;font-size:13px;color:#9ca3af">
-        Prefer a new tab?
-        <a id="feedback-link" href="#" target="_blank" rel="noopener">Open form in Google Forms</a>
+  <main class="pt-28 pb-16 px-container-padding flex-1">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-label-caps text-feedback uppercase tracking-wider mb-3">We need your input</p>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Your feedback matters</h1>
+      <p class="text-on-surface-variant font-body-lg mb-8">
+        Gesture Canvas is early. Every response helps us fix bugs, improve gestures,
+        and decide what to build next. Takes about <strong class="text-on-surface">2 minutes</strong>.
       </p>
 
-      <footer class="site-footer">
-        <a href="../">← Home</a>
-      </footer>
-    </main>
-  </div>
+      <div class="badge-row mb-8" style="justify-content:flex-start">
+        <span class="badge-pill badge-pill--muted">★ Rate 1–5</span>
+        <span class="badge-pill badge-pill--muted">✓ What you tried</span>
+        <span class="badge-pill badge-pill--muted">→ What to fix</span>
+      </div>
+
+      <div id="feedback-root" class="glass-panel-block glass-card rounded-3xl p-4 md:p-6">
+        <p class="text-on-surface-variant text-center py-12">Loading form…</p>
+      </div>
+
+      <p class="mt-6 text-body-md text-on-surface-variant text-center">
+        Prefer a new tab?
+        <a id="feedback-link" href="#" target="_blank" rel="noopener" class="text-primary-fixed-dim hover:underline">Open in Google Forms</a>
+      </p>
+
+      <div class="btn-row mt-10">
+        <a href="../app/" class="btn-gold gold-glow">Try demo first</a>
+        <a href="../extension/" class="btn-glass">Extension guide</a>
+        <a href="../" class="btn-glass">← Home</a>
+      </div>
+    </div>
+  </main>
+
+  <div id="gc-footer"></div>
 
   <script type="module">
+    import { renderDocsShell } from '../assets/docs-shell.js';
+    import { initDocsInteractions } from '../assets/docs-interactions.js';
     import { FEEDBACK_FORM_URL, feedbackEmbedUrl } from '../site-config.js';
+
+    renderDocsShell();
+    initDocsInteractions();
 
     const root = document.getElementById('feedback-root');
     const link = document.getElementById('feedback-link');
-
-    const isPlaceholder = FEEDBACK_FORM_URL.includes('REPLACE_WITH_YOUR_FORM_ID');
-
-    if (isPlaceholder) {
-      root.innerHTML = `
-        <div class="card feedback-placeholder">
-          <p><strong>Form URL not configured yet.</strong></p>
-          <p style="margin-top:10px">
-            Edit <code>docs/site-config.js</code> and set
-            <code>FEEDBACK_FORM_URL</code> to your Google Form link.
-          </p>
-          <p style="margin-top:10px">
-            Create a form at
-            <a href="https://forms.google.com" target="_blank" rel="noopener">forms.google.com</a>
-            → Send → copy link.
-          </p>
-        </div>`;
-      link.style.display = 'none';
-    } else {
-      link.href = FEEDBACK_FORM_URL;
-      root.innerHTML = `
-        <iframe
-          class="feedback-frame"
-          src="${feedbackEmbedUrl()}"
-          title="Gesture Canvas feedback form"
-        >Loading…</iframe>`;
-    }
+    link.href = FEEDBACK_FORM_URL;
+    root.innerHTML = `
+      <iframe
+        class="feedback-frame"
+        src="${feedbackEmbedUrl()}"
+        title="Gesture Canvas feedback form"
+      >Loading…</iframe>`;
   </script>
 </body>
 </html>

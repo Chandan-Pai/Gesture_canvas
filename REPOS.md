@@ -7,6 +7,7 @@ This project is split into **three separate Git repos**, all starting from the s
 | `Gesture_canvas` | `Chandan-Pai/Gesture_canvas` | **Initialization** baseline |
 | `jarvis-hand-controls` | `Chandan-Pai/jarvis-hand-controls` | Jarvis hand controls line |
 | `gesture-canvas-phase-2.0` | `Chandan-Pai/gesture-canvas-phase-2.0` | Phase 2.0 line |
+| `gesture-canvas-visionos` | *(create on GitHub)* | visionOS / Vision Pro presenter |
 
 Local paths (siblings under `Documents/GitHub/`):
 
@@ -14,7 +15,8 @@ Local paths (siblings under `Documents/GitHub/`):
 Documents/GitHub/
 ├── Gesture_canvas/              ← initialization (this repo)
 ├── jarvis-hand-controls/
-└── gesture-canvas-phase-2.0/
+├── gesture-canvas-phase-2.0/
+└── gesture-canvas-visionos/     ← SwiftUI visionOS app (Gesture Canvas baseline)
 ```
 
 Each repo has its own `main` branch and history. Change one repo without affecting the others. To sync a fix from initialization into another line, cherry-pick or merge manually.

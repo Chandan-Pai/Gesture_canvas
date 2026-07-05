@@ -4,26 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Presenter controls</title>
+  <link rel="stylesheet" href="../lib/glass-theme.css" />
   <link rel="stylesheet" href="sidepanel.css" />
   <script src="../lib/mediapipe-log-filter.js"></script>
   <script src="../vendor/mediapipe/hands/hands.js"></script>
 </head>
-<body>
-  <header>
+<body class="glass-trial">
+  <header class="glass-surface">
     <strong>Presenter controls</strong>
     <p id="status">Starting…</p>
-    <p class="badge">Only you see this — not shared in Meet</p>
+    <p class="badge glass-badge">Only you see this — not shared in Meet</p>
   </header>
 
   <section id="camera-permission" class="camera-permission hidden">
-    <div id="camera-prompt" class="camera-card">
+    <div id="camera-prompt" class="camera-card glass-surface">
       <h2>Camera access needed</h2>
       <p class="camera-warning"><strong>Not Google Slides.</strong> Allowing camera on docs.google.com does not enable Gesture Canvas.</p>
       <p>Chrome cannot ask for camera inside the side panel. We open a short permission page — only you see it, not Meet viewers.</p>
-      <button type="button" id="btn-allow-camera" class="btn-primary">Allow camera</button>
+      <button type="button" id="btn-allow-camera" class="btn-primary glass-btn glass-btn--gold">Allow camera</button>
       <p class="camera-note">A new tab opens → click <strong>Allow camera</strong> → choose <strong>Allow</strong> in Chrome&apos;s prompt.</p>
     </div>
-    <div id="camera-blocked" class="camera-card hidden">
+    <div id="camera-blocked" class="camera-card glass-surface hidden">
       <h2>Camera access is off</h2>
       <p class="camera-warning"><strong>Not Google Slides.</strong> The camera toggle on docs.google.com is for the website only.</p>
       <p>Gesture Canvas needs camera permission for the <strong>extension</strong> (chrome-extension://…).</p>
@@ -33,8 +34,8 @@
         <li>Return to this presenter panel — the camera should start automatically</li>
       </ol>
       <div class="camera-actions">
-        <button type="button" id="btn-retry-camera" class="btn-primary">Try again</button>
-        <button type="button" id="btn-camera-settings" class="btn-ghost">Open camera settings</button>
+        <button type="button" id="btn-retry-camera" class="btn-primary glass-btn glass-btn--gold">Try again</button>
+        <button type="button" id="btn-camera-settings" class="btn-ghost glass-btn glass-btn--ghost">Open camera settings</button>
       </div>
     </div>
   </section>
@@ -42,19 +43,19 @@
   <div id="camera-controls" class="camera-controls hidden">
     <video id="webcam" autoplay playsinline muted></video>
 
-    <section class="modes">
-      <button type="button" data-mode="off">Off</button>
-      <button type="button" data-mode="pointer" class="active">Pointer</button>
-      <button type="button" data-mode="write">Write</button>
+    <section class="modes glass-surface">
+      <button type="button" class="glass-btn" data-mode="off">Off</button>
+      <button type="button" class="glass-btn active" data-mode="pointer">Pointer</button>
+      <button type="button" class="glass-btn" data-mode="write">Write</button>
     </section>
 
-    <section class="tools">
-      <button type="button" data-tool="pen" class="active">Pen</button>
-      <button type="button" data-tool="arrow">Arrow</button>
-      <button type="button" data-tool="box">Box</button>
+    <section class="tools glass-surface">
+      <button type="button" class="glass-btn active" data-tool="pen">Pen</button>
+      <button type="button" class="glass-btn" data-tool="arrow">Arrow</button>
+      <button type="button" class="glass-btn" data-tool="box">Box</button>
     </section>
 
-    <p class="hint">☝ point · ✌ erase · 🤟 mode · 🤏 pinch · 👍/👎 slides · ✊ stop · 🖐 reset</p>
+    <p class="hint glass-surface">☝ point · ✌ erase · 🤟 mode · 🤏 pinch · 👍/👎 slides · ✊ stop · 🖐 reset</p>
   </div>
 
   <script type="module" src="sidepanel.js"></script>

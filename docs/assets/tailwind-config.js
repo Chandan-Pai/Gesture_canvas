@@ -1,0 +1,40 @@
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'surface-variant': '#353534',
+        'surface-tint': '#e9c400',
+        'on-primary': '#3a3000',
+        'surface': '#131313',
+        'on-primary-fixed': '#221b00',
+        'on-surface': '#e5e2e1',
+        'surface-container-low': '#1c1b1b',
+        'primary-fixed': '#ffe16d',
+        'primary-fixed-dim': '#e9c400',
+        'on-surface-variant': '#d0c6ab',
+        'surface-container-highest': '#353534',
+        'surface-container-lowest': '#0e0e0e',
+        'surface-container-high': '#2a2a2a',
+        'background': '#131313',
+        'on-background': '#e5e2e1',
+        'feedback': '#f472b6',
+      },
+      spacing: {
+        'container-padding': '24px',
+        'toolbar-width': '64px',
+        'gap-md': '16px',
+        'gap-lg': '24px',
+      },
+      fontSize: {
+        'label-caps': ['12px', { lineHeight: '1', letterSpacing: '0.05em', fontWeight: '700' }],
+        'headline-lg': ['32px', { lineHeight: '1.2', letterSpacing: '-0.02em', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '1.3', letterSpacing: '-0.01em', fontWeight: '600' }],
+        'headline-sm': ['18px', { lineHeight: '1.4', fontWeight: '600' }],
+        'body-md': ['14px', { lineHeight: '1.5', fontWeight: '400' }],
+        'body-lg': ['16px', { lineHeight: '1.6', fontWeight: '400' }],
+        'label-sm': ['11px', { lineHeight: '1', fontWeight: '500' }],
+      },
+    },
+  },
+};

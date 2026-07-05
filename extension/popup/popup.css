@@ -1,14 +1,14 @@
+/* Popup — liquid glass trial (revert: git restore extension/popup/popup.css) */
+
 * {
   box-sizing: border-box;
   margin: 0;
 }
 
 body {
-  width: 280px;
-  font: 13px/1.4 system-ui, -apple-system, sans-serif;
-  color: #e8eaef;
-  background: #12141a;
-  padding: 12px;
+  width: 300px;
+  font: 13px/1.4 'Inter', system-ui, -apple-system, sans-serif;
+  padding: 14px;
 }
 
 header {
@@ -16,6 +16,13 @@ header {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  padding: 10px 12px;
+}
+
+header strong {
+  color: var(--gc-gold);
+  font-size: 13px;
+  letter-spacing: 0.02em;
 }
 
 .dot {
@@ -27,56 +34,68 @@ header {
 
 .dot.on {
   background: #22c55e;
-  box-shadow: 0 0 8px #22c55e88;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+#idle,
+#active {
+  padding: 12px;
 }
 
 label {
   display: block;
   margin-bottom: 8px;
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--gc-muted);
 }
 
 input {
   width: 100%;
   margin-top: 4px;
-  padding: 8px;
-  border: 1px solid #2d3140;
-  border-radius: 8px;
-  background: #1a1d26;
-  color: #fff;
+  padding: 9px 10px;
+  border: 1px solid var(--gc-border);
+  border-radius: 10px;
+  background: var(--gc-surface);
+  color: var(--gc-text);
+  backdrop-filter: var(--gc-blur);
+  -webkit-backdrop-filter: var(--gc-blur);
 }
 
 button {
   width: 100%;
   margin-top: 8px;
-  padding: 9px;
-  border: none;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 12px;
 }
 
 .primary {
-  background: #6366f1;
-  color: #fff;
+  background: var(--gc-gold);
+  color: #221b00;
+  border: none;
+  box-shadow: 0 0 18px var(--gc-gold-glow);
 }
 
 .ghost {
-  background: transparent;
-  color: #a5b4fc;
-  border: 1px solid #3d4260;
+  background: var(--gc-surface);
+  color: var(--gc-text);
+  border: 1px solid var(--gc-border);
+  backdrop-filter: var(--gc-blur);
+  -webkit-backdrop-filter: var(--gc-blur);
 }
 
 .danger {
-  background: #3f1d24;
+  background: rgba(255, 26, 26, 0.15);
   color: #fca5a5;
+  border: 1px solid rgba(255, 26, 26, 0.25);
 }
 
 .hint {
   margin-top: 8px;
   font-size: 11px;
-  color: #6b7280;
+  color: var(--gc-muted);
 }
 
 .hint.small code {
@@ -86,7 +105,7 @@ button {
 
 .session-id code {
   font-size: 12px;
-  color: #facc15;
+  color: var(--gc-gold);
 }
 
 .hidden {
@@ -103,7 +122,7 @@ button {
   margin: 12px 0 8px;
   text-align: center;
   font-size: 10px;
-  color: #4b5563;
+  color: var(--gc-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -111,8 +130,8 @@ button {
 .badge {
   display: inline-block;
   margin-bottom: 6px;
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -120,19 +139,34 @@ button {
 }
 
 .badge.screen {
-  background: #312e81;
-  color: #c7d2fe;
+  background: var(--gc-gold-dim);
+  color: var(--gc-gold);
+  border: 1px solid rgba(233, 196, 0, 0.28);
 }
 
 .badge.tab {
-  background: #1e3a2f;
+  background: rgba(34, 197, 94, 0.15);
   color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.25);
 }
 
 .screen-steps {
-  color: #c7d2fe;
+  color: var(--gc-muted);
   line-height: 1.4;
-  padding: 6px 8px;
-  background: #1e1b4b;
-  border-radius: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--gc-surface);
+  border: 1px solid var(--gc-border);
+}
+
+button.glass-btn {
+  transition: transform 0.15s ease;
+}
+
+button.glass-btn:hover {
+  transform: scale(1.02);
+}
+
+button.glass-btn:active {
+  transform: scale(0.98);
 }

@@ -4,11 +4,13 @@ const INTRO_KEY = 'gc-intro-seen';
 export function initIntroCollapse() {
   const intro = document.getElementById('intro-panel');
   const compact = document.getElementById('compact-bar');
+  const sticky = document.getElementById('feedback-sticky');
   if (!intro || !compact) return;
 
   function collapse() {
     intro.classList.replace('expanded', 'collapsed');
     compact.classList.replace('hidden', 'visible');
+    sticky?.classList.add('visible');
     try {
       localStorage.setItem(INTRO_KEY, '1');
     } catch {

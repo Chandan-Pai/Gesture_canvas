@@ -1,0 +1,103 @@
+/**
+ * Liquid glass trial — shared extension theme (matches docs gold palette).
+ * Revert: remove this file's <link> from HTML and git restore *.css
+ */
+:root {
+  --gc-bg: #131313;
+  --gc-surface: rgba(255, 255, 255, 0.04);
+  --gc-surface-high: rgba(255, 255, 255, 0.07);
+  --gc-border: rgba(255, 255, 255, 0.1);
+  --gc-gold: #e9c400;
+  --gc-gold-dim: rgba(233, 196, 0, 0.18);
+  --gc-gold-glow: rgba(233, 196, 0, 0.25);
+  --gc-text: #e5e2e1;
+  --gc-muted: #9aa3b2;
+  --gc-laser: #ff1a1a;
+  --gc-blur: blur(20px) saturate(1.35);
+}
+
+body.glass-trial {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--gc-bg);
+  color: var(--gc-text);
+}
+
+body.glass-trial::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(233, 196, 0, 0.06), transparent),
+    var(--gc-bg);
+}
+
+.glass-surface {
+  background: var(--gc-surface);
+  border: 1px solid var(--gc-border);
+  backdrop-filter: var(--gc-blur);
+  -webkit-backdrop-filter: var(--gc-blur);
+  border-radius: 14px;
+}
+
+.glass-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--gc-gold-dim);
+  border: 1px solid rgba(233, 196, 0, 0.28);
+  color: var(--gc-gold);
+}
+
+.glass-btn {
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.glass-btn:hover {
+  transform: scale(1.02);
+}
+
+.glass-btn:active {
+  transform: scale(0.98);
+}
+
+.glass-btn--gold {
+  background: var(--gc-gold) !important;
+  color: #221b00 !important;
+  border: none !important;
+  box-shadow: 0 0 20px var(--gc-gold-glow);
+}
+
+.glass-btn--ghost {
+  background: var(--gc-surface) !important;
+  border: 1px solid var(--gc-border) !important;
+  color: var(--gc-text) !important;
+  backdrop-filter: var(--gc-blur);
+  -webkit-backdrop-filter: var(--gc-blur);
+}
+
+.glass-btn.active {
+  border-color: rgba(233, 196, 0, 0.45) !important;
+  background: var(--gc-gold-dim) !important;
+  color: var(--gc-gold) !important;
+  box-shadow: 0 0 16px rgba(233, 196, 0, 0.12);
+}
+
+.glass-btn[data-mode="pointer"].active {
+  border-color: rgba(255, 26, 26, 0.5) !important;
+  background: rgba(255, 26, 26, 0.18) !important;
+  color: #ff8a8a !important;
+  box-shadow: 0 0 16px rgba(255, 26, 26, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-btn:hover,
+  .glass-btn:active {
+    transform: none;
+  }
+}

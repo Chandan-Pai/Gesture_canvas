@@ -46,11 +46,13 @@
 #gc-tools {
   display: flex;
   gap: 4px;
-  padding: 4px;
+  padding: 5px 6px;
   border-radius: 999px;
-  background: rgba(10, 12, 18, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
+  background: rgba(19, 19, 19, 0.82);
+  border: 1px solid rgba(233, 196, 0, 0.18);
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 #gc-tools.hidden {
@@ -76,8 +78,8 @@
 }
 
 #gc-toolbar button.active {
-  background: rgba(99, 102, 241, 0.45);
-  color: #fff;
+  background: rgba(233, 196, 0, 0.22);
+  color: #ffe16d;
 }
 
 #gc-toolbar button[data-mode="pointer"].active {

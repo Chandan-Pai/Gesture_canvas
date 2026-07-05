@@ -1,82 +1,77 @@
+/* Side panel — liquid glass trial (revert: git restore extension/sidepanel/sidepanel.css) */
+
 * { box-sizing: border-box; margin: 0; }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #0a0c12;
-  color: #e8eaef;
-  padding: 10px;
+  padding: 12px;
   min-width: 260px;
 }
 
 header {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  padding: 12px;
 }
 
 header strong {
   font-size: 13px;
+  color: var(--gc-gold);
+  letter-spacing: 0.02em;
 }
 
 header p {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--gc-muted);
   margin-top: 4px;
 }
 
 .badge {
   display: inline-block;
-  margin-top: 6px !important;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(255, 26, 26, 0.15);
-  color: #ff6b6b !important;
-  font-size: 10px !important;
-  font-weight: 600;
+  margin-top: 8px !important;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit;
 }
 
 #webcam {
   width: 100%;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #111;
   transform: scaleX(-1);
-  margin-top: 6px;
+  margin-top: 8px;
   display: block;
+  border: 1px solid var(--gc-border);
 }
 
 .modes,
 .tools {
   display: flex;
-  gap: 4px;
-  margin-top: 8px;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px;
 }
 
 button {
   flex: 1;
-  padding: 8px 4px;
-  border: 1px solid #2d3140;
-  border-radius: 8px;
-  background: #151820;
-  color: #cbd5e1;
+  padding: 9px 6px;
+  border: 1px solid var(--gc-border);
+  border-radius: 10px;
+  background: var(--gc-surface);
+  color: var(--gc-text);
   font-weight: 600;
   font-size: 11px;
   cursor: pointer;
-}
-
-button.active {
-  border-color: #6366f1;
-  background: #1e1b4b;
-  color: #fff;
-}
-
-button[data-mode="pointer"].active {
-  border-color: #ff1a1a;
-  background: rgba(255, 26, 26, 0.2);
-  color: #ff6b6b;
+  backdrop-filter: var(--gc-blur);
+  -webkit-backdrop-filter: var(--gc-blur);
 }
 
 .hint {
-  margin-top: 10px;
+  margin-top: 12px;
+  padding: 10px 12px;
   font-size: 10px;
-  color: #6b7280;
+  color: var(--gc-muted);
   line-height: 1.45;
 }
 
@@ -89,42 +84,41 @@ button[data-mode="pointer"].active {
 }
 
 .camera-card {
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #2d3140;
-  background: #11141c;
+  padding: 14px;
 }
 
 .camera-card h2 {
   font-size: 13px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  color: var(--gc-gold);
 }
 
 .camera-warning {
   margin-bottom: 8px !important;
   padding: 8px 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: rgba(255, 26, 26, 0.12);
+  border: 1px solid rgba(255, 26, 26, 0.2);
   color: #ffb4b4 !important;
   font-size: 11px !important;
 }
 
 .camera-card p {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--gc-muted);
   line-height: 1.5;
 }
 
 .camera-note {
   margin-top: 8px !important;
   font-size: 10px !important;
-  color: #6b7280 !important;
+  color: var(--gc-muted) !important;
 }
 
 .camera-steps {
   margin: 10px 0 12px 18px;
   font-size: 11px;
-  color: #cbd5e1;
+  color: var(--gc-text);
   line-height: 1.5;
 }
 
@@ -135,31 +129,27 @@ button[data-mode="pointer"].active {
 .camera-actions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .btn-primary,
 .btn-ghost {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 600;
   font-size: 12px;
   cursor: pointer;
 }
 
-.btn-primary {
-  border: none;
-  background: #ff1a1a;
-  color: #fff;
-}
-
-.btn-ghost {
-  border: 1px solid #2d3140;
-  background: #151820;
-  color: #cbd5e1;
-}
-
 .camera-controls {
   margin-top: 4px;
+}
+
+.modes.glass-surface,
+.tools.glass-surface,
+header.glass-surface,
+.camera-card.glass-surface,
+.hint.glass-surface {
+  /* classes applied in HTML */
 }

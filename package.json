@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node server/dev-server.mjs",
     "start": "node server/dev-server.mjs",
+    "docs:dev": "python3 -m http.server 8765 --directory docs",
     "relay": "node relay/standalone-relay.mjs",
     "sync:devlog": "node scripts/sync-devlog-to-notion.mjs",
     "sync:devlog:dry": "node scripts/sync-devlog-to-notion.mjs --dry-run",

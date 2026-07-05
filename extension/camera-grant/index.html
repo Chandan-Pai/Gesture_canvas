@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Allow camera — Gesture Canvas</title>
+  <link rel="stylesheet" href="../lib/glass-theme.css" />
   <link rel="stylesheet" href="grant.css" />
 </head>
-<body>
-  <main>
+<body class="glass-trial">
+  <main class="glass-surface">
     <h1>Allow camera for Gesture Canvas</h1>
     <p class="lead">Chrome cannot show the camera prompt inside the side panel. This page asks on behalf of the extension.</p>
     <p class="note"><strong>Not Google Slides.</strong> Camera access on docs.google.com is separate and does not enable gesture control.</p>
@@ -15,8 +16,8 @@
     <video id="preview" autoplay playsinline muted></video>
     <p id="status">Click the button below, then choose <strong>Allow</strong> in Chrome&apos;s prompt.</p>
 
-    <button type="button" id="btn-grant" class="btn-primary">Allow camera</button>
-    <button type="button" id="btn-settings" class="btn-ghost hidden">Open extension camera settings</button>
+    <button type="button" id="btn-grant" class="btn-primary glass-btn glass-btn--gold">Allow camera</button>
+    <button type="button" id="btn-settings" class="btn-ghost glass-btn glass-btn--ghost hidden">Open extension camera settings</button>
   </main>
   <script type="module" src="grant.js"></script>
 </body>
