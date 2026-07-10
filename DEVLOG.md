@@ -274,3 +274,19 @@ Running record of design decisions, changes, problems found, and fixes.
 **Next:** Confirm live Pages after deploy; keep gesture/demo work on `develop`
 
 ---
+
+## [2026-07-10] - Open Graph preview for LinkedIn shares
+
+**Decision:** Add OG/Twitter meta tags and a 1200x630 share image so LinkedIn unfurls the product site instead of losing to Google Form metadata.
+
+**Changed:**
+- `docs/index.html` — og/twitter tags, canonical URL (`chandanpai.github.io`)
+- `docs/assets/og-preview.png` — share card image
+
+**Trade-offs:**
+- Branded static card instead of a live demo screenshot for now; faster to ship for open beta posts
+- Form link should still live in the first comment so LinkedIn keeps one product preview
+
+**Next:** After Pages deploy, refresh the URL in LinkedIn Post Inspector before posting
+
+---
