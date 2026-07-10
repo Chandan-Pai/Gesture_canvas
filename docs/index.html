@@ -17,7 +17,7 @@
 
   <main class="relative pt-24 flex-1">
     <!-- Hero -->
-    <section class="relative min-h-[85vh] flex flex-col items-center justify-center px-container-padding text-center overflow-hidden hero-gradient" data-hero-spotlight>
+    <section class="relative flex flex-col items-center justify-center px-container-padding text-center overflow-hidden hero-gradient pb-16" data-hero-spotlight>
       <div class="absolute inset-0 -z-10 opacity-30">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
         <div class="w-full h-full bg-gradient-to-br from-surface-container-high via-background to-surface-container-lowest"></div>
@@ -25,31 +25,31 @@
 
       <div class="max-w-4xl mx-auto space-y-6 relative z-10">
         <div class="badge-row">
-          <span class="badge-pill badge-pill--feedback">We need your feedback — 2 min</span>
+          <span class="badge-pill badge-pill--feedback">We need your feedback (2 min)</span>
           <span class="badge-pill badge-pill--gold">The Presentation Engine</span>
         </div>
         <h1 class="text-5xl md:text-7xl lg:text-8xl tracking-tight text-on-surface leading-[1.1] font-bold">
           Hands-first control for the <span class="text-primary-fixed-dim">modern presenter</span>
         </h1>
         <p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto font-body-lg">
-          Eliminate the mouse hunt. Control your slides, annotate live, and guide your audience with hand gestures — browser demo or Chrome extension for Meet.
+          Eliminate the mouse hunt. Control your slides, annotate live, and guide your audience with hand gestures. Browser demo or Chrome extension for Meet.
         </p>
         <div class="btn-row btn-row--lg pt-8">
           <a href="app/" class="btn-gold btn-gold--lg gold-glow w-full sm:w-auto text-center">Try Browser Demo</a>
           <a href="feedback/" class="btn-feedback btn-feedback--lg feedback-glow w-full sm:w-auto text-center">Leave Feedback</a>
           <a href="extension/" class="btn-glass w-full sm:w-auto text-center">Install Extension</a>
         </div>
-      </div>
 
-      <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-6 glass-panel bg-surface-container-high/60 border border-white/10 p-4 rounded-full max-w-[95vw] overflow-x-auto">
-        <div class="flex items-center gap-2 px-3 border-r border-white/10 shrink-0">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-label-sm uppercase opacity-60 whitespace-nowrap">MediaPipe Hands</span>
-        </div>
-        <div class="flex gap-6 shrink-0">
-          <span class="material-symbols-outlined text-primary-fixed-dim opacity-80" title="Laser pointer">ads_click</span>
-          <span class="material-symbols-outlined text-on-surface-variant" title="Ink overlay">draw</span>
-          <span class="material-symbols-outlined text-on-surface-variant" title="Slide nav">thumb_up</span>
+        <div class="mt-10 flex items-center justify-center gap-6 glass-panel bg-surface-container-high/60 border border-white/10 p-4 rounded-full max-w-[95vw] overflow-x-auto">
+          <div class="flex items-center gap-2 px-3 border-r border-white/10 shrink-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-label-sm uppercase opacity-60 whitespace-nowrap">MediaPipe Hands</span>
+          </div>
+          <div class="flex gap-6 shrink-0 items-center">
+            <svg class="gc-doc-icon text-primary-fixed-dim opacity-80" aria-hidden="true" title="Laser pointer"><use href="assets/icons.svg#laser"/></svg>
+            <svg class="gc-doc-icon text-on-surface-variant" aria-hidden="true" title="Ink overlay"><use href="assets/icons.svg#draw"/></svg>
+            <svg class="gc-doc-icon text-on-surface-variant" aria-hidden="true" title="Slide nav"><use href="assets/icons.svg#thumb-up"/></svg>
+          </div>
         </div>
       </div>
     </section>
@@ -61,7 +61,7 @@
         <p class="text-label-caps text-feedback uppercase tracking-wider mb-4">Help us improve</p>
         <h2 class="text-headline-md md:text-3xl mb-4">Tried it? Tell us what you think</h2>
         <p class="text-on-surface-variant font-body-lg mb-8 max-w-lg mx-auto">
-          Gesture Canvas is early — <strong class="text-on-surface">your feedback shapes what we build next</strong>. Demo or extension, ~2 minutes.
+          Gesture Canvas is early. <strong class="text-on-surface">Your feedback shapes what we build next</strong>. Demo or extension, about 2 minutes.
         </p>
         <div class="badge-row mb-8">
           <span class="badge-pill badge-pill--muted">1 · Try demo</span>
@@ -81,24 +81,24 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="glass-card p-8">
           <div class="icon-box w-12 h-12 bg-white/5 rounded-2xl mb-6 text-primary-fixed-dim">
-            <span class="material-symbols-outlined" aria-hidden="true" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">slideshow</span>
+            <svg class="gc-doc-icon gc-doc-icon--lg" aria-hidden="true"><use href="assets/icons.svg#slideshow"/></svg>
           </div>
           <h3 class="text-headline-sm mb-2">Google Slides + Meet</h3>
           <p class="text-on-surface-variant font-body-md">Laser on shared slides; thumbs up/down for next and previous. Present in this tab, share in Meet.</p>
         </div>
         <div class="glass-card p-8">
           <div class="icon-box w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-6 text-primary-fixed-dim">
-            <span class="material-symbols-outlined" aria-hidden="true">cast_connected</span>
+            <svg class="gc-doc-icon gc-doc-icon--lg" aria-hidden="true"><use href="assets/icons.svg#cast"/></svg>
           </div>
           <h3 class="text-headline-sm mb-2">Live Demos</h3>
           <p class="text-on-surface-variant font-body-md">Point at UI with a visible red laser. Circle and underline in Write mode without leaving the screen.</p>
         </div>
         <div class="glass-card p-8">
           <div class="icon-box w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-6 text-primary-fixed-dim">
-            <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+            <svg class="gc-doc-icon gc-doc-icon--lg" aria-hidden="true"><use href="assets/icons.svg#groups"/></svg>
           </div>
           <h3 class="text-headline-sm mb-2">Remote Collaboration</h3>
-          <p class="text-on-surface-variant font-body-md">Companion link for co-presenters — each person gets a unique laser color over WebSocket.</p>
+          <p class="text-on-surface-variant font-body-md">Companion link for co-presenters. Each person gets a unique laser color over WebSocket.</p>
         </div>
       </div>
     </section>
@@ -111,21 +111,21 @@
           <h2 class="text-4xl md:text-5xl font-bold mb-8 leading-tight">Professional tools for expressive speaking.</h2>
           <ul class="space-y-8">
             <li class="flex gap-4">
-              <span class="material-symbols-outlined text-primary-fixed-dim shrink-0">ads_click</span>
+              <svg class="gc-doc-icon text-primary-fixed-dim shrink-0" aria-hidden="true"><use href="assets/icons.svg#laser"/></svg>
               <div>
                 <h3 class="text-headline-sm">Virtual Laser Pointer</h3>
-                <p class="text-on-surface-variant font-body-md">☝ Index finger — red laser in Pointer mode; draw in Write mode.</p>
+                <p class="text-on-surface-variant font-body-md">☝ Index finger: red laser in Pointer mode, draw in Write mode.</p>
               </div>
             </li>
             <li class="flex gap-4">
-              <span class="material-symbols-outlined text-primary-fixed-dim shrink-0">draw</span>
+              <svg class="gc-doc-icon text-primary-fixed-dim shrink-0" aria-hidden="true"><use href="assets/icons.svg#draw"/></svg>
               <div>
                 <h3 class="text-headline-sm">Ink Overlay</h3>
                 <p class="text-on-surface-variant font-body-md">✌ Erase in Write mode · 🤏 Pinch to pan · ✊ Fist to finish stroke.</p>
               </div>
             </li>
             <li class="flex gap-4">
-              <span class="material-symbols-outlined text-primary-fixed-dim shrink-0">thumb_up</span>
+              <svg class="gc-doc-icon text-primary-fixed-dim shrink-0" aria-hidden="true"><use href="assets/icons.svg#thumb-up"/></svg>
               <div>
                 <h3 class="text-headline-sm">Slide Navigation</h3>
                 <p class="text-on-surface-variant font-body-md">👍 / 👎 hold and release for next and previous slide. 🤟 Three fingers toggles Pointer ↔ Write.</p>
@@ -174,7 +174,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="glass-card p-8">
           <h3 class="text-headline-sm mb-3">Browser demo</h3>
-          <p class="text-on-surface-variant font-body-md mb-8">Draw, import PDFs, test gestures. Webcam only — no extension.</p>
+          <p class="text-on-surface-variant font-body-md mb-8">Draw, import PDFs, test gestures. Webcam only, no extension.</p>
           <a href="app/" class="btn-gold gold-glow">Open demo</a>
         </div>
         <div class="glass-card p-8">
@@ -190,7 +190,7 @@
       <div class="max-w-2xl mx-auto glass-panel-block glass-card p-12 md:p-16 rounded-[3rem] relative overflow-hidden">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-transparent via-primary-fixed/50 to-transparent"></div>
         <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to present <br />with your hands?</h2>
-        <p class="text-on-surface-variant font-body-lg mb-10">Try the demo, then tell us what broke — high feedback volume = faster fixes.</p>
+        <p class="text-on-surface-variant font-body-lg mb-10">Try the demo, then tell us what broke. More feedback means faster fixes.</p>
         <div class="btn-row btn-row--lg">
           <a href="app/" class="btn-gold btn-gold--lg gold-glow w-full sm:w-auto text-center">Launch Free Demo</a>
           <a href="feedback/" class="btn-feedback btn-feedback--lg feedback-glow w-full sm:w-auto text-center">Leave Feedback</a>
@@ -200,7 +200,7 @@
   </main>
 
   <div id="feedback-sticky" class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-6 flex-wrap px-6 py-3 glass-panel bg-surface/90 border-t border-feedback/30" aria-live="polite">
-    <p class="text-body-md m-0"><strong>Help us improve</strong> — 2-min feedback</p>
+    <p class="text-body-md m-0"><strong>Help us improve</strong> (2-min feedback)</p>
     <a href="feedback/" class="btn-feedback text-label-caps uppercase tracking-wider feedback-glow" style="padding:0.5rem 1.25rem;font-size:12px;">Leave feedback</a>
   </div>
 

@@ -258,3 +258,19 @@ Running record of design decisions, changes, problems found, and fixes.
 **Next:** Load unpacked extension, test Meet tab share flow, tune mapping calibration.
 
 ---
+
+## [2026-07-10] - Fix homepage hero overlap on Pages
+
+**Decision:** Move the MediaPipe status pill out of absolute positioning so it no longer sits on top of the CTA buttons. Keep it in normal document flow under the buttons.
+
+**Changed:**
+- `docs/index.html` — status pill in flow with spacing; drop `min-h-[85vh]` that forced the absolute pill into the button row; SVG icons for the pill
+- `docs/assets/docs-theme.css` — `.gc-doc-icon` helper
+- `docs/assets/icons.svg` — shared icon sprite for landing
+
+**Trade-offs:**
+- Absolute bottom pill looked nice on short viewports but collided on real hero height; flow layout is safer for Pages
+
+**Next:** Confirm live Pages after deploy; keep gesture/demo work on `develop`
+
+---
